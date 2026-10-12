@@ -4,7 +4,7 @@
     "name": "Catgirl",
     "url": "/assets/models/Catgirl.glb",
     "poster": "/assets/Catgirl-poster.png",
-    "caption": "Кошачьи ушки, сиреневый образ и демонстрационная анимация.",
+    "caption": "Кошачьи ушки, сиреневый образ.",
     "index": "001",
     "key": "catgirl",
     "clips": [
@@ -40,24 +40,26 @@
     "name": "Rang",
     "url": "/assets/models/Rang.glb",
     "poster": "/assets/Rang-poster.png",
-    "caption": "Фэнтезийный персонаж с костюмом и реквизитом.",
+    "caption": "Фэнтезийный персонаж с костюмом и реквизитом. Без текстур: скульптурный просмотр.",
     "index": "004",
     "key": "rang",
     "clips": [
       "Animation"
-    ]
+    ],
+    "untextured": true
   },
   {
     "id": "Demoneesa",
     "name": "Demoneesa",
     "url": "/assets/models/Demoneesa.glb",
     "poster": "/assets/Demoneesa-poster.png",
-    "caption": "Фэнтезийный образ с демонстрационной анимацией.",
+    "caption": "Фэнтезийный образ для 3D-просмотра. Без текстур: скульптурный просмотр.",
     "index": "005",
     "key": "demoneesa",
     "clips": [
       "Animation"
-    ]
+    ],
+    "untextured": true
   },
   {
     "id": "Succub",
@@ -88,31 +90,33 @@
     "name": "Coral",
     "url": "/assets/models/Coral.glb",
     "poster": "/assets/Coral-poster.png",
-    "caption": "Скульптурная модель без цветных текстур.",
+    "caption": "Скульптурная модель без цветных текстур. Без текстур: скульптурный просмотр.",
     "index": "008",
     "key": "coral",
     "clips": [
       "Animation"
-    ]
+    ],
+    "untextured": true
   },
   {
     "id": "Turquoise",
     "name": "Turquoise",
     "url": "/assets/models/Turquoise.glb",
     "poster": "/assets/Turquoise-poster.png",
-    "caption": "Скульптурная модель без цветных текстур.",
+    "caption": "Скульптурная модель без цветных текстур. Без текстур: скульптурный просмотр.",
     "index": "009",
     "key": "turquoise",
     "clips": [
       "Animation"
-    ]
+    ],
+    "untextured": true
   },
   {
     "id": "Sunshine",
     "name": "Sunshine",
     "url": "/assets/models/Sunshine.glb",
     "poster": "/assets/Sunshine-poster.png",
-    "caption": "Персонаж с демонстрационной анимацией.",
+    "caption": "Персонаж для 3D-просмотра.",
     "index": "010",
     "key": "sunshine",
     "clips": [
