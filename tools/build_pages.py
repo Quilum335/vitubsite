@@ -139,7 +139,7 @@ def folder(n, title, desc, f1, f2, img, files, links):
 
 def home():
     src = (SRC / 'index.html').read_text(encoding='utf-8')
-    head = head_from(src, '\n<link rel="preload" href="/assets/Catgirl-poster.png" as="image">')
+    head = head_from(src, '\n<link rel="preload" href="/assets/Catgirl-poster.png" as="image"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>')
     avatars = ''.join(f'<button data-hero-model="{m["id"]}" class="{"active" if i == 0 else ""}" aria-pressed="{"true" if i == 0 else "false"}" aria-label="Показать {escape(m["name"])}"><img src="{m["poster"]}" alt="" loading="lazy"></button>' for i, m in enumerate(models))
     cards = '\n'.join(card(m) for m in models)
     marquee_items = ['3D VTuber-модели на заказ', 'Риггинг и мимика', 'VRM · GLB', 'VSeeFace', 'Warudo', 'VRChat', 'Дизайн персонажа с нуля', 'Доработка готовых моделей', 'Подготовка к первому эфиру']
@@ -156,17 +156,21 @@ def home():
                [('VRM и подготовка к эфиру', '/services/vrm/'), ('Из чего складывается цена', '/journal/3d-vtuber-price/')]),
     ])
     body = f'''<main id="main">
-<section class="hero wrap" id="top"><div class="hero-card"><canvas class="waves" aria-hidden="true"></canvas><span class="hero-sun" aria-hidden="true"></span>
+<section class="hero wrap" id="top"><div class="hero-card intro"><canvas class="waves" aria-hidden="true"></canvas><span class="hero-sun" aria-hidden="true"></span><span class="spot" aria-hidden="true"></span>
 <div class="hero-grid"><div class="hero-copy">
 <span class="kicker">NORMAS · 3D VTuber studio</span>
-<h1>3D VTuber-модели <em>на заказ</em></h1>
-<p class="lead">Создаём персонажей для стримов: образ, моделирование, риг и мимика, настройка под VSeeFace, Warudo и VRChat. Покрути наших героев прямо здесь.</p>
-<div class="hero-actions"><a class="btn btn-lime" href="/services/3d-vtuber-model/">Заказать модель <span class="arr">↗</span></a><a class="btn btn-glass" href="#characters">Смотреть в 3D</a></div>
+<h1><span class="ln"><span>3D VTuber-модели</span></span> <span class="ln"><span><em>на заказ</em></span></span></h1>
+<p class="lead">Персонажи, которые живут: моргают, дышат, следят за тобой и говорят твоим голосом. Дизайн, моделирование, риг и мимика под VSeeFace, Warudo и VRChat.</p>
+<div class="hero-actions"><a class="btn btn-lime" href="/services/3d-vtuber-model/">Заказать модель <span class="arr">↗</span></a><a class="btn btn-glass" href="#characters">Все персонажи</a></div>
 <p class="hero-note">Уже знаешь, чего хочешь? <a href="#" data-brief>Опиши персонажа в брифе ↗</a></p>
 </div>
-<div class="hero-stage"><div class="viewer hero-viewer" data-hero-viewer data-start="Catgirl"><img class="poster" src="/assets/Catgirl-poster.png" alt="Catgirl — 3D VTuber-персонаж" width="720" height="864"><span class="loading">Загружаем 3D…</span></div>
-<span class="chip c1"><b></b>Риг + мимика</span><span class="chip c2">VRM · GLB</span><span class="chip c3">Крути мышью ↔</span></div></div>
-<div class="hero-switch"><div class="now"><span data-hero-caption>3D GLB · 001</span><strong data-hero-name>Catgirl</strong></div><div class="avatars" role="group" aria-label="Выбрать персонажа">{avatars}</div><button class="btn btn-glass btn-sm" data-hero-open data-model="Catgirl">Подробнее ↗</button></div>
+<div class="hero-stage"><span class="halo" aria-hidden="true"></span><div class="viewer hero-viewer" data-hero-viewer data-start="Catgirl"><img class="poster" src="/assets/Catgirl-poster.png" alt="Catgirl — 3D VTuber-персонаж" width="720" height="864"><span class="loading">Персонаж просыпается…</span></div>
+<span class="chip c1"><b></b>Моргает и дышит</span><span class="chip c2">Следит за курсором</span>
+<div class="vt-controls" role="group" aria-label="Режим витубера"><button class="vt-btn" data-vtuber-cam aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="3"/><path d="m16 10 5-3v10l-5-3"/></svg>Стать витубером</button><button class="vt-btn" data-vtuber-mic aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Говорить голосом</button></div>
+<p class="vt-status" role="status" hidden></p>
+<div class="vt-pip" hidden><video muted playsinline aria-label="Твоя камера"></video><span>LIVE</span></div>
+</div></div>
+<div class="hero-switch"><div class="now"><span data-hero-caption>Живой 3D-персонаж · 001</span><strong data-hero-name>Catgirl</strong></div><div class="avatars" role="group" aria-label="Выбрать персонажа">{avatars}</div><button class="btn btn-glass btn-sm" data-hero-open data-model="Catgirl">Подробнее ↗</button></div>
 </div>
 <div class="marquee" aria-hidden="true"><div class="marquee-track">{mq}{mq}</div></div></section>
 
