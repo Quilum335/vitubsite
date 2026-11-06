@@ -153,7 +153,7 @@ def home():
 </div>
 <div class="hero-stage"><span class="halo" aria-hidden="true"></span>
 <div class="alive" data-alive-hero data-neck="{first['neck']}" data-hip="{first['hip']}" data-src="/assets/chars/{first['id']}.webp" title="Нажми на меня"><img class="ph" src="/assets/chars/{first['id']}-sm.webp" alt="{escape(first['name'])} — концепт VTuber-персонажа" width="512" height="768"></div>
-<span class="chip c1"><b></b>Тяни — повернётся в 2.5D ↔</span><span class="chip c2">Нажми — заговорит ♡</span></div></div>
+<span class="chip c1"><b></b>Потяни меня ↔</span><span class="chip c2">Нажми — заговорит ♡</span></div></div>
 <div class="hero-switch"><div class="now"><span data-hero-style>{'Pastel Kawaii' if first['style'] == 'pastel' else 'Neon Cyberpunk'}</span><strong data-hero-name>{escape(first['name'])}</strong></div><div class="avatars" role="group" aria-label="Выбрать персонажа">{avatars}</div><button class="btn btn-glass btn-sm" data-hero-open data-open-char="{first['id']}">Подробнее ↗</button></div>
 </div>
 <div class="marquee" aria-hidden="true"><div class="marquee-track">{mq}{mq}</div></div></section>
@@ -196,7 +196,7 @@ def home():
 <h2 id="char-title">Mimi</h2><p data-c-tagline></p><p data-c-desc></p>
 <span class="ctl-label">Характер</span><div class="traits" data-c-traits></div>
 <span class="ctl-label">Палитра</span><div class="palette-row" data-c-palette></div>
-<p class="small-note">Тяни персонажа, чтобы повернуть его в 2.5D. Нажми — и он заговорит ♡</p>
+<p class="small-note">Потяни персонажа — он наклонится, волосы раскачаются. Нажми — и он заговорит ♡</p>
 <div class="hero-actions" style="margin-top:auto"><a class="btn btn-lime btn-sm" href="https://t.me/Egor_shks" target="_blank" rel="noopener">Заказать в этом стиле ↗</a><button class="like" id="char-like" data-like="mimi" aria-pressed="false" aria-label="В мудборд" style="position:static">{ICON_HEART}</button></div></div></div></dialog>'''
     (DIST / 'index.html').write_text(page(head, body, True, char_dialog), encoding='utf-8')
 
@@ -270,7 +270,7 @@ def order():
 <p class="lead">Создадим персонажа для твоих стримов: начнём с образа, соберём модель, настроим риг и мимику и проверим её в твоей программе.</p>
 <div class="hero-actions"><a class="btn btn-lime" data-contact="telegram" href="{TG}">Обсудить заказ <span class="arr">↗</span></a><button class="btn btn-glass" data-brief>Подготовить бриф</button></div>
 <p class="hero-note">Удобнее по почте? <a data-contact="email" href="mailto:{MAIL}">{MAIL}</a></p></div>
-<figure class="order-art" style="margin:0"><div class="alive" data-alive-hero data-neck="{CHARS[1]['neck']}" data-hip="{CHARS[1]['hip']}" data-src="/assets/chars/lumi.webp"><img class="ph" src="/assets/chars/lumi-sm.webp" alt="Lumi — концепт VTuber-персонажа NORMAS" width="512" height="768"></div><span class="chip c1"><b></b>Тяни — повернётся ↔</span><a class="chip c2" href="/#characters" style="top:auto;bottom:24px;left:auto;right:24px">Все концепты ↗</a></figure></section>
+<figure class="order-art" style="margin:0"><div class="alive" data-alive-hero data-neck="{CHARS[1]['neck']}" data-hip="{CHARS[1]['hip']}" data-src="/assets/chars/lumi.webp"><img class="ph" src="/assets/chars/lumi-sm.webp" alt="Lumi — концепт VTuber-персонажа NORMAS" width="512" height="768"></div><span class="chip c1"><b></b>Потяни меня ↔</span><a class="chip c2" href="/#characters" style="top:auto;bottom:24px;left:auto;right:24px">Все концепты ↗</a></figure></section>
 
 <section class="section"><div class="section-head"><div><span class="kicker">01 · Состав проекта</span><h2>От референса <em>до эфира</em></h2></div><p>Открой папку, чтобы посмотреть этапы и связанные материалы.</p></div><div class="folders">{folders}</div></section>
 
