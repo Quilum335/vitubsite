@@ -36,3 +36,4 @@
 .order-shell :is(a,button,summary):focus-visible,.order-intro a:focus-visible{outline:2px solid #9665b3;outline-offset:4px}
 @media(max-width:760px){.order-shell{width:min(100% - 2rem,620px);padding-top:6rem}.order-hero,.order-information{grid-template-columns:1fr}.order-portrait{max-width:420px;width:100%;justify-self:center}.order-folders{grid-template-columns:1fr}.folder-stack{height:10.5rem}.order-intro{padding-inline:1.25rem}.order-actions{gap:.8rem 1.05rem}}
 @media(prefers-reduced-motion:reduce){.folder-sheet,.folder-glass{transition:none}}
+.collection-links{display:flex;justify-content:center;flex-wrap:wrap;gap:.25rem 1.5rem}.collection-links .source-link{margin-inline:0}
