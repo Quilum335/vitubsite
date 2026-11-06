@@ -4,123 +4,153 @@
     "name": "Catgirl",
     "url": "/assets/models/Catgirl.glb",
     "poster": "/assets/Catgirl-poster.png",
-    "caption": "Кошачьи ушки, сиреневый образ.",
+    "caption": "Кошачьи ушки и хвост, лавандовое худи и гольфы. Уютный стримерский образ.",
     "index": "001",
     "key": "catgirl",
     "clips": [
       "Animation"
-    ]
+    ],
+    "tag": "Повседневный",
+    "kind": "casual fantasy",
+    "keywords": "кошка неко catgirl худи сиреневый"
   },
   {
     "id": "Lilac",
     "name": "Lilac",
     "url": "/assets/models/Lilac.glb",
     "poster": "/assets/Lilac-poster.png",
-    "caption": "Сиреневый уличный образ.",
+    "caption": "Рыжая героиня в лавандовом худи и джинсовых шортах.",
     "index": "002",
     "key": "lilac",
     "clips": [
       "Animation"
-    ]
+    ],
+    "tag": "Повседневный",
+    "kind": "casual",
+    "keywords": "рыжая худи шорты casual"
   },
   {
     "id": "Teal",
     "name": "Teal",
     "url": "/assets/models/Teal.glb",
     "poster": "/assets/Teal-poster.png",
-    "caption": "Уличный образ в бирюзовой палитре.",
+    "caption": "Каре, джинсовая куртка и карго. Городской образ.",
     "index": "003",
     "key": "teal",
     "clips": [
       "Animation"
-    ]
+    ],
+    "tag": "Уличный",
+    "kind": "casual",
+    "keywords": "каре куртка карго street"
   },
   {
     "id": "Rang",
     "name": "Rang",
     "url": "/assets/models/Rang.glb",
     "poster": "/assets/Rang-poster.png",
-    "caption": "Фэнтезийный персонаж с костюмом и реквизитом. Без текстур: скульптурный просмотр.",
+    "caption": "Аниме-героиня с длинными хвостами и посохом. Скульпт без текстур.",
     "index": "004",
     "key": "rang",
     "clips": [
       "Animation"
     ],
-    "untextured": true
+    "untextured": true,
+    "tag": "Аниме · скульпт",
+    "kind": "fantasy sculpt",
+    "keywords": "аниме хвосты посох магия"
   },
   {
     "id": "Demoneesa",
     "name": "Demoneesa",
     "url": "/assets/models/Demoneesa.glb",
     "poster": "/assets/Demoneesa-poster.png",
-    "caption": "Фэнтезийный образ для 3D-просмотра. Без текстур: скульптурный просмотр.",
+    "caption": "Демоница с рожками, крыльями и хвостом. Скульпт без текстур.",
     "index": "005",
     "key": "demoneesa",
     "clips": [
       "Animation"
     ],
-    "untextured": true
+    "untextured": true,
+    "tag": "Фэнтези · скульпт",
+    "kind": "fantasy sculpt",
+    "keywords": "демон рога крылья хвост"
   },
   {
     "id": "Succub",
     "name": "Succub",
     "url": "/assets/models/Succub.glb",
     "poster": "/assets/Succub-poster.png",
-    "caption": "Фэнтезийный персонаж.",
+    "caption": "Суккуб с рогами и алыми волосами. Яркий фэнтези-образ.",
     "index": "006",
     "key": "succub",
     "clips": [
       "Animation"
-    ]
+    ],
+    "tag": "Фэнтези",
+    "kind": "fantasy",
+    "keywords": "суккуб демон рога красные волосы"
   },
   {
     "id": "Devil",
     "name": "Devil",
     "url": "/assets/models/Devil.glb",
     "poster": "/assets/Devil-poster.png",
-    "caption": "Фэнтезийный образ.",
+    "caption": "Чертовка в школьной форме с хвостом и рожками.",
     "index": "007",
     "key": "devil",
     "clips": [
       "Animation"
-    ]
+    ],
+    "tag": "Аниме",
+    "kind": "fantasy",
+    "keywords": "чертовка аниме школьная форма демон"
   },
   {
     "id": "Coral",
     "name": "Coral",
     "url": "/assets/models/Coral.glb",
     "poster": "/assets/Coral-poster.png",
-    "caption": "Скульптурная модель без цветных текстур. Без текстур: скульптурный просмотр.",
+    "caption": "Базовая женская фигура: основа под костюм и стиль.",
     "index": "008",
     "key": "coral",
     "clips": [
       "Animation"
     ],
-    "untextured": true
+    "untextured": true,
+    "tag": "База · скульпт",
+    "kind": "sculpt",
+    "keywords": "база фигура тело"
   },
   {
     "id": "Turquoise",
     "name": "Turquoise",
     "url": "/assets/models/Turquoise.glb",
     "poster": "/assets/Turquoise-poster.png",
-    "caption": "Скульптурная модель без цветных текстур. Без текстур: скульптурный просмотр.",
+    "caption": "Атлетичная базовая фигура для будущего персонажа.",
     "index": "009",
     "key": "turquoise",
     "clips": [
       "Animation"
     ],
-    "untextured": true
+    "untextured": true,
+    "tag": "База · скульпт",
+    "kind": "sculpt",
+    "keywords": "база атлетичная фигура тело"
   },
   {
     "id": "Sunshine",
     "name": "Sunshine",
     "url": "/assets/models/Sunshine.glb",
     "poster": "/assets/Sunshine-poster.png",
-    "caption": "Персонаж для 3D-просмотра.",
+    "caption": "Реалистичная героиня в жёлтом боди: база под одежду.",
     "index": "010",
     "key": "sunshine",
     "clips": [
       "Animation"
-    ]
+    ],
+    "tag": "База",
+    "kind": "sculpt",
+    "keywords": "реалистичная база боди"
   }
 ]

@@ -2,41 +2,105 @@ import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {VRMLoaderPlugin,VRMUtils} from '@pixiv/three-vrm';
-import {WorldController} from './world.js';
 import {models} from './models.js';
-const names=Object.fromEntries(models.map(m=>[m.id,m.name]));
-const modelById=Object.fromEntries(models.map(m=>[m.id,m]));
+
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const byId=Object.fromEntries(models.map(m=>[m.id,m]));
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const cache=new Map();
-async function load(url){if(!cache.has(url))cache.set(url,fetch(url).then(r=>{if(!r.ok)throw Error('Model HTTP '+r.status);return r.arrayBuffer()}).catch(e=>{cache.delete(url);throw e}));const bytes=await cache.get(url);if(cache.size>3){const key=cache.keys().next().value;if(key!==url)cache.delete(key)}const loader=new GLTFLoader();loader.register(p=>new VRMLoaderPlugin(p));return loader.parseAsync(bytes.slice(0),'')}
-class Viewer{
- constructor(container,hero=false){this.el=container;this.hero=hero;this.scene=new THREE.Scene();this.camera=new THREE.PerspectiveCamera(30,1,.01,100);this.renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.setClearColor(0,0);this.el.appendChild(this.renderer.domElement);this.controls=new OrbitControls(this.camera,this.renderer.domElement);this.controls.enablePan=false;this.controls.enableDamping=true;this.controls.minDistance=1;this.controls.maxDistance=9;this.controls.minPolarAngle=.4;this.controls.maxPolarAngle=2.3;this.controls.autoRotate=false;this.controls.autoRotateSpeed=.5;this.controls.enableZoom=!hero;
- this.scene.add(new THREE.HemisphereLight(0xffffff,0xbac3a8,1.3));const key=new THREE.DirectionalLight(0xfff9ed,1.5);key.position.set(3,4,4);this.scene.add(key);const fill=new THREE.DirectionalLight(0xdbdfff,.9);fill.position.set(-3,2,-2);this.scene.add(fill);
- const shadow=new THREE.Mesh(new THREE.CircleGeometry(.47,64),new THREE.MeshBasicMaterial({color:0x696460,transparent:true,opacity:.12,depthWrite:false}));shadow.rotation.x=-Math.PI/2;shadow.position.y=.004;this.scene.add(shadow);
- this.clock=new THREE.Clock();this.elapsed=0;this.active=true;this.version=0;new ResizeObserver(()=>this.resize()).observe(container);this.resize();this.renderer.setAnimationLoop(()=>this.frame());this.observer=new IntersectionObserver(entries=>this.active=entries[0].isIntersecting,{threshold:0});this.observer.observe(container);
- }
- resize(){const r=this.el.getBoundingClientRect();if(!r.width||!r.height)return;this.renderer.setSize(r.width,r.height);this.camera.aspect=r.width/r.height;this.camera.updateProjectionMatrix()}
- async set(url,label,isLocal=false){this.active=true;const seq=++this.version;this.el.classList.remove('ready');let status=this.el.querySelector('.viewer-loading');if(status)status.textContent='Загружаем 3D-модель…';try{const gltf=await load(url);if(seq!==this.version){VRMUtils.deepDispose(gltf.scene);return}if(this.model){this.scene.remove(this.model);VRMUtils.deepDispose(this.model)}this.vrm=gltf.userData.vrm;this.asset=this.vrm?this.vrm.scene:gltf.scene;this.model=new THREE.Group();this.model.add(this.asset);if(this.vrm){VRMUtils.rotateVRM0(this.vrm);this.vrm.humanoid.resetNormalizedPose();this.setBone('leftUpperArm',{z:1.1});this.setBone('rightUpperArm',{z:-1.1});this.setBone('leftLowerArm',{y:-.15});this.setBone('rightLowerArm',{y:.15});this.vrm.update(0)}this.model.updateMatrixWorld(true);const box=new THREE.Box3().setFromObject(this.model),size=box.getSize(new THREE.Vector3());const factor=1.8/Math.max(size.y,.01);this.asset.scale.multiplyScalar(factor);this.asset.position.sub(box.getCenter(new THREE.Vector3()).multiplyScalar(factor));this.asset.position.y+=.9;this.height=1.8;if(!this.vrm)this.model.rotation.y=0;this.scene.add(this.model);this.mixer=null;this.playing=false;this.hasMorphs=false;this.asset.traverse(n=>{if(n.morphTargetDictionary&&Object.keys(n.morphTargetDictionary).length)this.hasMorphs=true});this.view('full');this.expression('neutral');if(!this.hero){document.querySelectorAll('[data-expression]').forEach(b=>b.disabled=!this.vrm?.expressionManager&&(!this.hasMorphs||b.dataset.expression==='angry'));document.querySelector('#model-dialog .dialog-top .eyebrow').textContent=isLocal?'CHARACTER EXPLORER / ЛОКАЛЬНЫЙ ФАЙЛ':'CHARACTER EXPLORER / GLB';document.querySelector('.model-panel .eyebrow').textContent=isLocal?'ТВОЯ МОДЕЛЬ':'NORMAS / ПЕРСОНАЖ';document.querySelector('.model-note').textContent=isLocal?'Модель открыта только в твоём браузере. Права определяются лицензией исходного файла. У GLB без VRM-мимики кнопки эмоций отключены.':'Персонаж из проекта 3d_models_zar. Статичный 3D-просмотр без танца. Трекинг камеры не используется; совместимость со стриминговыми программами проверяется отдельно.';const ab=document.querySelector('#animation-toggle');ab.hidden=!this.mixer;ab.textContent='Пауза анимации';ab.setAttribute('aria-pressed','false')}this.el.classList.add('ready');this.el.dataset.loaded=label||url;this.resize()}catch(e){if(status)status.textContent='Не удалось открыть модель. Попробуй другой файл или обнови страницу.';console.error('Model load failed',e)}}
- setBone(name,r){const bone=this.vrm?.humanoid.getNormalizedBoneNode(name);if(bone){for(const k of Object.keys(r))bone.rotation[k]=r[k]}}
- view(which){let h=this.height||1.7;this.controls.target.set(0,which==='face'?h*.91:h*.51,0);this.camera.position.set(which==='face'?.05:this.hero?.25:.35,which==='face'?h*.91:h*.57,which==='face'?h*.73:h*(this.hero?2:2.15));this.controls.update()}
- expression(name){this.currentExpression=name;const m=this.vrm?.expressionManager;if(m){for(const n of ['happy','angry','surprised','sad','relaxed'])m.setValue(n,n===name?1:0);return}this.asset?.traverse(node=>{const dictionary=node.morphTargetDictionary;if(!dictionary)return;for(const [key,index] of Object.entries(dictionary)){if(/smile/i.test(key))node.morphTargetInfluences[index]=name==='happy'?1:0;if(/lip(part|motion)|mouth.*open/i.test(key))node.morphTargetInfluences[index]=name==='surprised'?.6:0}})}
- frame(){const dt=Math.min(this.clock.getDelta(),.05);if(!this.active||document.hidden)return;this.elapsed+=dt;if(this.vrm&&!reduce){const t=this.elapsed;this.setBone('head',{y:Math.sin(t*.5)*.065,z:Math.sin(t*.35)*.035});this.setBone('chest',{z:Math.sin(t*.7)*.013});this.setBone('leftUpperArm',{z:1.1+Math.sin(t*.8)*.018});this.setBone('rightUpperArm',{z:-1.1+Math.sin(t*.8)*.018});const blink=Math.pow(Math.max(0,Math.cos(t*1.4)),36);this.vrm.expressionManager?.setValue('blink',blink)}this.mixer?.update(reduce||!this.playing?0:dt);this.world?.update(dt,this.elapsed);if(!this.world&&this.hasMorphs)this.expression(this.currentExpression||'neutral');this.vrm?.update(reduce?0:dt);if(!this.world)this.controls.update();this.renderer.render(this.scene,this.camera)}
+async function load(url){
+  if(!cache.has(url))cache.set(url,fetch(url).then(r=>{if(!r.ok)throw Error('Model HTTP '+r.status);return r.arrayBuffer()}).catch(e=>{cache.delete(url);throw e}));
+  const bytes=await cache.get(url);
+  if(cache.size>3){const k=cache.keys().next().value;if(k!==url)cache.delete(k)}
+  const loader=new GLTFLoader();loader.register(p=>new VRMLoaderPlugin(p));
+  return loader.parseAsync(bytes.slice(0),'');
 }
-let heroViewer,explorer;
-try{heroViewer=new Viewer(document.querySelector('.hero-viewer'),true);if(document.querySelector('#journey'))heroViewer.world=new WorldController(heroViewer);heroViewer.set(modelById.Catgirl.url,'Catgirl')}catch(e){console.error('3D unavailable',e);const s=document.querySelector('.hero-viewer .viewer-loading');if(s)s.textContent='3D недоступен в этом браузере — посмотри изображения моделей.'}
-const dialog=document.querySelector('#model-dialog');
-let collectionViewer;
-const collectionElement=document.querySelector('#collection-viewer');
-const collectionData=modelById;
-let selectedCharacter='Catgirl';
-function showCollection(id){selectedCharacter=id;if(!collectionElement)return;const data=collectionData[id];document.querySelector('.collection-stage').dataset.character=data.key;document.querySelector('#collection-name').textContent=names[id];document.querySelector('.collection-ghost').textContent=names[id].toUpperCase();document.querySelector('#collection-caption').textContent=data.caption;document.querySelector('.collection-id').textContent='CHARACTER / '+data.index;document.querySelector('#collection-open').dataset.model=id;const poster=collectionElement.querySelector('.viewer-poster');poster.src=data.poster;poster.alt=names[id]+' — демонстрационный 3D-персонаж';document.querySelectorAll('[data-collection]').forEach(b=>{b.classList.toggle('active',b.dataset.collection===id);b.setAttribute('aria-pressed',b.dataset.collection===id)});try{collectionViewer??=new Viewer(collectionElement,true);collectionViewer.set(data.url,names[id]);heroViewer?.set(data.url,names[id]);const hp=document.querySelector('.world-viewer .viewer-poster');if(hp){hp.src=data.poster;hp.alt=names[id]+' — 3D-персонаж'}document.querySelector('.world-demo').textContent=names[id].toUpperCase()+' / 3D GLB'}catch(e){collectionElement.querySelector('.viewer-loading').textContent='3D недоступен в этом браузере. Можно посмотреть изображение.'}}
-if(collectionElement){const lazyCollection=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){showCollection(selectedCharacter);lazyCollection.disconnect()}},{rootMargin:'150px'});lazyCollection.observe(collectionElement);document.querySelectorAll('[data-collection]').forEach(b=>b.addEventListener('click',()=>showCollection(b.dataset.collection)))}
-document.querySelectorAll('[data-model]').forEach(b=>b.addEventListener('click',()=>{dialog.showModal();const id=b.dataset.model;document.querySelector('#model-title').textContent=names[id]||'Персонаж';try{explorer??=new Viewer(document.querySelector('#explorer'));explorer.set(modelById[id].url,names[id]);explorer.resize();document.querySelectorAll('[data-expression]').forEach(x=>x.classList.toggle('active',x.dataset.expression==='neutral'))}catch(e){document.querySelector('#explorer .viewer-loading').textContent='Для 3D-просмотра нужен браузер с WebGL.'}}));
-document.querySelectorAll('[data-expression]').forEach(b=>b.addEventListener('click',()=>{explorer?.expression(b.dataset.expression);document.querySelectorAll('[data-expression]').forEach(x=>x.classList.toggle('active',x===b))}));
-document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>explorer?.view(b.dataset.view)));
-document.querySelector('#rotate-toggle')?.addEventListener('click',e=>{if(!explorer)return;const active=!explorer.controls.autoRotate;explorer.controls.autoRotate=active;e.currentTarget.setAttribute('aria-pressed',active)});
-document.querySelector('#save-frame')?.addEventListener('click',()=>{if(!explorer?.model)return;explorer.renderer.render(explorer.scene,explorer.camera);explorer.renderer.domElement.toBlob(blob=>{if(!blob)return;const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=(document.querySelector('#model-title').textContent||'character')+'-3D.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),1500)})});
-document.querySelector('#model-file')?.addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;if(file.size>100*1024*1024){alert('Для просмотра выбери модель меньше 100 МБ.');return}const url=URL.createObjectURL(file);document.querySelector('#model-title').textContent=file.name;await explorer.set(url,file.name,true);cache.delete(url);URL.revokeObjectURL(url)});
-dialog?.addEventListener('close',()=>{if(explorer){explorer.active=false;explorer.controls.autoRotate=false;document.querySelector('#rotate-toggle').setAttribute('aria-pressed','false')}});
 
-document.querySelector('#animation-toggle')?.addEventListener('click',e=>{if(!explorer)return;explorer.playing=!explorer.playing;e.currentTarget.textContent=explorer.playing?'Пауза анимации':'Играть анимацию';e.currentTarget.setAttribute('aria-pressed',!explorer.playing)});
+class Viewer{
+  constructor(el,{hero=false}={}){
+    this.el=el;this.hero=hero;this.scene=new THREE.Scene();
+    this.camera=new THREE.PerspectiveCamera(hero?26:30,1,.01,100);
+    this.renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:!hero});
+    this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.setClearColor(0,0);
+    el.appendChild(this.renderer.domElement);
+    const c=this.controls=new OrbitControls(this.camera,this.renderer.domElement);
+    c.enablePan=false;c.enableDamping=true;c.minDistance=1;c.maxDistance=9;c.minPolarAngle=hero?1.15:.4;c.maxPolarAngle=hero?1.75:2.3;c.enableZoom=!hero;c.autoRotate=hero&&!reduce;c.autoRotateSpeed=.9;
+    this.scene.add(new THREE.HemisphereLight(0xf2ecff,0x2a2140,1.25));
+    const key=new THREE.DirectionalLight(0xfff4ec,1.6);key.position.set(3,4,4);this.scene.add(key);
+    const rim=new THREE.DirectionalLight(0xb59cff,1.4);rim.position.set(-3,2.5,-3);this.scene.add(rim);
+    const fill=new THREE.DirectionalLight(0xd8ff5e,.25);fill.position.set(2,.5,-2);this.scene.add(fill);
+    const shadow=new THREE.Mesh(new THREE.CircleGeometry(.5,64),new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.35,depthWrite:false}));shadow.rotation.x=-Math.PI/2;shadow.position.y=.004;this.scene.add(shadow);
+    this.clock=new THREE.Clock();this.elapsed=0;this.active=true;this.version=0;
+    new ResizeObserver(()=>this.resize()).observe(el);this.resize();
+    new IntersectionObserver(e=>this.visible=e[0].isIntersecting).observe(el);this.visible=true;
+    this.renderer.setAnimationLoop(()=>this.frame());
+  }
+  resize(){const r=this.el.getBoundingClientRect();if(!r.width||!r.height)return;this.renderer.setSize(r.width,r.height,false);this.camera.aspect=r.width/r.height;this.camera.updateProjectionMatrix()}
+  status(t){const s=this.el.querySelector('.loading');if(s)s.textContent=t}
+  async set(url,isLocal=false){
+    const seq=++this.version;this.el.classList.remove('ready');this.status('Загружаем 3D-модель…');
+    try{
+      const gltf=await load(url);if(seq!==this.version){VRMUtils.deepDispose(gltf.scene);return}
+      if(this.model){this.scene.remove(this.model);VRMUtils.deepDispose(this.model)}
+      this.vrm=gltf.userData.vrm;this.asset=this.vrm?this.vrm.scene:gltf.scene;this.model=new THREE.Group();this.model.add(this.asset);
+      if(this.vrm){VRMUtils.rotateVRM0(this.vrm);this.vrm.humanoid.resetNormalizedPose();this.setBone('leftUpperArm',{z:1.1});this.setBone('rightUpperArm',{z:-1.1});this.vrm.update(0)}
+      this.model.updateMatrixWorld(true);
+      const box=new THREE.Box3().setFromObject(this.model),size=box.getSize(new THREE.Vector3()),f=1.8/Math.max(size.y,.01);
+      this.asset.scale.multiplyScalar(f);this.asset.position.sub(box.getCenter(new THREE.Vector3()).multiplyScalar(f));this.asset.position.y+=.9;this.height=1.8;
+      this.scene.add(this.model);this.hasMorphs=false;this.asset.traverse(n=>{if(n.morphTargetDictionary&&Object.keys(n.morphTargetDictionary).length)this.hasMorphs=true});
+      this.view('full');this.expression('neutral');
+      if(!this.hero){
+        $$('[data-expression]').forEach(b=>b.disabled=!this.vrm?.expressionManager&&(!this.hasMorphs||b.dataset.expression==='angry'));
+        const note=$('.model-note');if(note)note.textContent=isLocal?'Модель открыта только в твоём браузере и никуда не загружается.':'Статичный 3D-просмотр без анимации. Совместимость со стриминговыми программами проверяем под проект.';
+      }
+      this.el.classList.add('ready');this.resize();
+    }catch(e){this.status('Не удалось открыть модель — обнови страницу.');console.error('Model load failed',e)}
+  }
+  setBone(name,r){const b=this.vrm?.humanoid.getNormalizedBoneNode(name);if(b)for(const k in r)b.rotation[k]=r[k]}
+  view(which){const h=this.height||1.7,face=which==='face';this.controls.target.set(0,face?h*.91:h*.5,0);this.camera.position.set(face?.05:this.hero?.3:.35,face?h*.91:h*.56,face?h*.73:h*(this.hero?2.45:2.15));this.controls.update()}
+  expression(name){this.current=name;const m=this.vrm?.expressionManager;if(m){for(const n of['happy','angry','surprised','sad','relaxed'])m.setValue(n,n===name?1:0);return}
+    this.asset?.traverse(node=>{const d=node.morphTargetDictionary;if(!d)return;for(const[k,i]of Object.entries(d)){if(/smile/i.test(k))node.morphTargetInfluences[i]=name==='happy'?1:0;if(/lip(part|motion)|mouth.*open/i.test(k))node.morphTargetInfluences[i]=name==='surprised'?.6:0}})}
+  frame(){
+    const dt=Math.min(this.clock.getDelta(),.05);if(!this.active||!this.visible||document.hidden)return;this.elapsed+=dt;
+    if(this.vrm&&!reduce){const t=this.elapsed;this.setBone('head',{y:Math.sin(t*.5)*.065,z:Math.sin(t*.35)*.035});this.vrm.expressionManager?.setValue('blink',Math.pow(Math.max(0,Math.cos(t*1.4)),36))}
+    this.vrm?.update(reduce?0:dt);this.controls.update();this.renderer.render(this.scene,this.camera);
+  }
+}
+
+/* hero */
+const heroEl=$('[data-hero-viewer]');let hero;
+function heroSwitch(id){
+  const m=byId[id];if(!m)return;
+  $$('[data-hero-model]').forEach(b=>{const on=b.dataset.heroModel===id;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on)});
+  const name=$('[data-hero-name]'),cap=$('[data-hero-caption]'),poster=heroEl?.querySelector('.poster');
+  if(name)name.textContent=m.name;if(cap)cap.textContent=(m.untextured?'Скульпт без текстур':'3D GLB')+' · '+m.index;
+  if(poster){poster.src=m.poster;poster.alt=m.name+' — 3D VTuber-персонаж'}
+  const open=$('[data-hero-open]');if(open)open.dataset.model=id;
+  hero?.set(m.url);
+}
+if(heroEl){
+  const start=()=>{try{hero=new Viewer(heroEl,{hero:true});hero.set(byId[heroEl.dataset.start||'Catgirl'].url)}catch(e){heroEl.querySelector('.loading').textContent='3D недоступен в этом браузере'}};
+  const idle=window.requestIdleCallback||(f=>setTimeout(f,400));
+  if(document.readyState==='complete')idle(start);else addEventListener('load',()=>idle(start));
+  $$('[data-hero-model]').forEach(b=>b.addEventListener('click',()=>heroSwitch(b.dataset.heroModel)));
+}
+
+/* explorer dialog */
+const dialog=$('#model-dialog');let explorer;
+function openModel(id){
+  const m=byId[id];if(!dialog||!m)return;
+  document.querySelectorAll('dialog[open]').forEach(d=>d!==dialog&&d.close());
+  dialog.showModal();$('#model-title').textContent=m.name;
+  const cap=$('#model-caption');if(cap)cap.textContent=m.caption;
+  const like=$('#model-like');if(like){like.dataset.like=id;let s=[];try{s=JSON.parse(localStorage.getItem('normas-mood')||'[]')}catch{}like.setAttribute('aria-pressed',s.includes(id))}
+  try{explorer??=new Viewer($('#explorer'));explorer.active=true;explorer.set(m.url);explorer.resize();$$('[data-expression]').forEach(x=>x.classList.toggle('active',x.dataset.expression==='neutral'))}
+  catch(e){$('#explorer .loading').textContent='Для 3D-просмотра нужен браузер с WebGL.'}
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-model]');if(b){e.preventDefault();openModel(b.dataset.model)}});
+$$('[data-expression]').forEach(b=>b.addEventListener('click',()=>{explorer?.expression(b.dataset.expression);$$('[data-expression]').forEach(x=>x.classList.toggle('active',x===b))}));
+$$('[data-view]').forEach(b=>b.addEventListener('click',()=>explorer?.view(b.dataset.view)));
+$('#rotate-toggle')?.addEventListener('click',e=>{if(!explorer)return;const a=!explorer.controls.autoRotate;explorer.controls.autoRotate=a;e.currentTarget.setAttribute('aria-pressed',a)});
+$('#save-frame')?.addEventListener('click',()=>{if(!explorer?.model)return;explorer.renderer.render(explorer.scene,explorer.camera);explorer.renderer.domElement.toBlob(b=>{if(!b)return;const a=document.createElement('a'),u=URL.createObjectURL(b);a.href=u;a.download=($('#model-title').textContent||'character')+'-NORMAS.png';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500)})});
+$('#model-file')?.addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;if(f.size>100*1024*1024){alert('Выбери модель меньше 100 МБ.');return}const u=URL.createObjectURL(f);$('#model-title').textContent=f.name;await explorer.set(u,true);cache.delete(u);URL.revokeObjectURL(u)});
+dialog?.addEventListener('close',()=>{if(explorer){explorer.active=false;explorer.controls.autoRotate=false;$('#rotate-toggle')?.setAttribute('aria-pressed','false')}});
+const m=location.hash.match(/^#m-(\w+)/);if(m&&byId[m[1]])setTimeout(()=>openModel(m[1]),300);
