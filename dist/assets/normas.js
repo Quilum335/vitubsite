@@ -130,15 +130,7 @@ $('#bar-brief')?.addEventListener('click',e=>openBrief(e.currentTarget));
 const pal=$('#palette');
 if(pal){
   const input=$('input',pal),list=$('.pal-list',pal);let items=[],sel=0;
-  const pages=[
-    ['VTuber-модель на заказ','Услуга · состав, цена, этапы','/services/3d-vtuber-model/','✳'],
-    ['Риггинг и мимика','Услуга · скелет, blend shapes','/services/rigging/','◎'],
-    ['VRM и подготовка к эфиру','Услуга · VSeeFace, Warudo, VRChat','/services/vrm/','▶'],
-    ['Сколько стоит 3D VTuber-модель','Журнал · бюджет','/journal/3d-vtuber-price/','₽'],
-    ['2D или 3D VTuber','Журнал · формат','/journal/2d-or-3d/','◐'],
-    ['Как подготовить референсы','Журнал · бриф','/journal/vtuber-brief/','✎'],
-    ['О концептах и технологиях','Как оживают персонажи','/credits/','i'],
-  ];
+  const pages=[["Модель витубера на заказ", "Услуга · 2D и 3D, от идеи до эфира", "/services/model-vitubera/", "✳"], ["2D-модель и Live2D", "Услуга · Арт, слои и риг для VTube Studio", "/services/2d-vtuber-model/", "✳"], ["PNGTuber-аватар", "Услуга · Быстрый старт для стримов", "/services/pngtuber/", "✳"], ["Аватар для VRChat", "Услуга · 3D-аватар с физикой и мимикой", "/services/vrchat-avatar/", "✳"], ["Цены", "Услуга · Цена договорная — смета после брифа", "/prices/", "✳"], ["3D-модель витубера", "Услуга · моделирование, текстуры, риг", "/services/3d-vtuber-model/", "✳"], ["Риггинг и мимика", "Услуга · скелет, эмоции, физика", "/services/rigging/", "◎"], ["VRM и подготовка к эфиру", "Услуга · VSeeFace, Warudo, VRChat", "/services/vrm/", "▶"], ["Как стать витубером", "Журнал · Пошаговый план для старта", "/journal/kak-stat-vituberom/", "✎"], ["Настройка VSeeFace", "Журнал · Модель, трекинг и OBS", "/journal/vseeface/", "✎"], ["Warudo для новичков", "Журнал · 3D-витубинг с блюпринтами", "/journal/warudo/", "✎"], ["VRoid или модель на заказ", "Журнал · Что выбрать новичку", "/journal/vroid-ili-zakaz/", "✎"], ["Где заказать модель витубера", "Журнал · Как выбрать исполнителя", "/journal/gde-zakazat-model-vitubera/", "✎"], ["VTube Studio", "Журнал · Запуск 2D-модели", "/journal/vtube-studio/", "✎"], ["Сколько стоит модель витубера", "Журнал · бюджет", "/journal/3d-vtuber-price/", "₽"], ["2D или 3D", "Журнал · формат", "/journal/2d-or-3d/", "◐"], ["Референсы и бриф", "Журнал · идея персонажа", "/journal/vtuber-brief/", "✎"], ["Все статьи журнала", "Журнал", "/journal/", "☰"], ["О концептах и технологиях", "Как оживают персонажи", "/credits/", "i"]];
   const actions=[['Заказать модель','Telegram · '+(cfg.telegram||'').replace('https://t.me/','@'),cfg.telegram||'#','✦'],['Составить бриф','Опиши персонажа за 2 минуты','brief','✦'],['Написать в Telegram',(cfg.telegram||'').replace('https://t.me/','@'),cfg.telegram||'#','✈']];
   function render(){
     const s=input.value.trim().toLowerCase();const m=(t)=>!s||t.toLowerCase().includes(s);
