@@ -138,9 +138,8 @@ if(pal){
     ['2D или 3D VTuber','Журнал · формат','/journal/2d-or-3d/','◐'],
     ['Как подготовить референсы','Журнал · бриф','/journal/vtuber-brief/','✎'],
     ['О моделях и технологии','Источники и лицензии','/credits/','i'],
-    ['Каталог моделей на Renigt','Поиск и фильтры по персонажам','https://renigt.online/','↗'],
   ];
-  const actions=[['Составить бриф','Опиши персонажа за 2 минуты','brief','✦'],['Написать в Telegram',(cfg.telegram||'').replace('https://t.me/','@'),cfg.telegram||'#','✈']];
+  const actions=[['Заказать модель','Telegram · '+(cfg.telegram||'').replace('https://t.me/','@'),cfg.telegram||'#','✦'],['Составить бриф','Опиши персонажа за 2 минуты','brief','✦'],['Написать в Telegram',(cfg.telegram||'').replace('https://t.me/','@'),cfg.telegram||'#','✈']];
   function render(){
     const s=input.value.trim().toLowerCase();const m=(t)=>!s||t.toLowerCase().includes(s);
     const ms=CH.filter(x=>m(x.name+' '+x.tagline+' '+x.keywords+' '+x.traits.join(' ')+' '+STYLE[x.style])).map(x=>({g:'Концепты',t:x.name,d:x.tagline,img:`/assets/chars/${x.id}-face.webp`,act:()=>openChar(x.id)}));

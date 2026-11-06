@@ -43,18 +43,18 @@ def header(home):
 <a class="logo" href="/" aria-label="NORMAS — главная"><span class="logo-mark" aria-hidden="true">✳</span><span>NORMAS<small>VTUBER STUDIO</small></span></a>
 <nav class="seg" aria-label="Основная навигация">{seg}</nav>
 <button class="search-trigger" data-search aria-label="Поиск по сайту">{ICON_SEARCH}<span>Поиск</span><kbd>Ctrl K</kbd></button>
-<a class="btn btn-lime btn-sm header-cta" href="/services/3d-vtuber-model/">Заказать модель</a>
+<a class="btn btn-lime btn-sm header-cta" href="https://t.me/Egor_shks" target="_blank" rel="noopener">Заказать модель</a>
 <button class="menu-btn" aria-label="Меню" aria-expanded="false"><i></i><i></i></button>
 </div></header>
-<div class="drawer" aria-label="Мобильное меню">{drawer}<a class="btn btn-lime" href="/services/3d-vtuber-model/">Заказать модель <span class="arr">↗</span></a></div>'''
+<div class="drawer" aria-label="Мобильное меню">{drawer}<a class="btn btn-lime" href="https://t.me/Egor_shks" target="_blank" rel="noopener">Заказать модель <span class="arr">↗</span></a></div>'''
 
 def footer():
     return f'''<footer class="site-footer"><div class="wrap">
 <div><a class="logo" href="/"><span class="logo-mark" aria-hidden="true">✳</span><span>NORMAS<small>VTUBER STUDIO</small></span></a><p>3D VTuber-модели на заказ: образ, моделирование, риг, мимика и подготовка к эфиру.</p></div>
 <div><h4>Услуги</h4><a href="/services/3d-vtuber-model/">3D-модель на заказ</a><a href="/services/rigging/">Риггинг и мимика</a><a href="/services/vrm/">VRM и эфир</a></div>
 <div><h4>Журнал</h4><a href="/journal/3d-vtuber-price/">Цена 3D-модели</a><a href="/journal/2d-or-3d/">2D или 3D</a><a href="/journal/vtuber-brief/">Референсы и бриф</a></div>
-<div><h4>Связь</h4><a data-contact="telegram" href="{TG}">Telegram ↗</a><a data-contact="email" href="mailto:{MAIL}">{MAIL}</a><a href="https://renigt.online/">Каталог на Renigt ↗</a><a href="/credits/">О моделях</a></div>
-</div><div class="wrap" style="display:block;margin-top:40px"><span class="mono">© 2026 NORMAS · Персонажи с характером</span></div></footer>'''
+<div><h4>Связь</h4><a data-contact="telegram" href="{TG}">Telegram ↗</a><a data-contact="email" href="mailto:{MAIL}">{MAIL}</a><a href="/credits/">О моделях</a></div>
+</div><div class="wrap foot-bottom"><span class="mono">© 2026 NORMAS · Персонажи с характером</span><a class="btn btn-glass btn-sm clone-btn" href="https://renigt.online/" target="_blank" rel="noopener">Зайти на клон сайта · Renigt ↗</a></div></footer>'''
 
 def brief_dialog():
     return f'''<dialog id="brief-dialog" aria-labelledby="brief-title"><div class="dlg-top"><span class="kicker">Бриф на персонажа</span><button class="x" aria-label="Закрыть">×</button></div>
@@ -148,7 +148,7 @@ def home():
 <span class="kicker">NORMAS · VTuber studio</span>
 <h1><span class="ln"><span>VTuber-модели</span></span> <span class="ln"><span><em>на заказ</em></span></span></h1>
 <p class="lead">Создаём персонажей, которых хочется смотреть часами: дизайн, модель, риг и мимика, настройка под VSeeFace, Warudo и VRChat. Пастельные милашки или неоновый киберпанк — выбирай свой стиль.</p>
-<div class="hero-actions"><a class="btn btn-lime" href="/services/3d-vtuber-model/">Заказать персонажа <span class="arr">↗</span></a><a class="btn btn-glass" href="#characters">Смотреть концепты</a></div>
+<div class="hero-actions"><a class="btn btn-lime" href="https://t.me/Egor_shks" target="_blank" rel="noopener">Заказать персонажа <span class="arr">↗</span></a><a class="btn btn-glass" href="#characters">Смотреть концепты</a></div>
 <p class="hero-note">Уже знаешь, чего хочешь? <a href="#" data-brief>Опиши персонажа в брифе ↗</a></p>
 </div>
 <div class="hero-stage"><span class="halo" aria-hidden="true"></span>
@@ -197,7 +197,7 @@ def home():
 <span class="ctl-label">Характер</span><div class="traits" data-c-traits></div>
 <span class="ctl-label">Палитра</span><div class="palette-row" data-c-palette></div>
 <p class="small-note">Персонаж дышит и следит за курсором. Нажми на него ♡</p>
-<div class="hero-actions" style="margin-top:auto"><button class="btn btn-lime btn-sm" data-brief>Хочу персонажа в этом стиле ↗</button><button class="like" id="char-like" data-like="mimi" aria-pressed="false" aria-label="В мудборд" style="position:static">{ICON_HEART}</button></div></div></div></dialog>'''
+<div class="hero-actions" style="margin-top:auto"><a class="btn btn-lime btn-sm" href="https://t.me/Egor_shks" target="_blank" rel="noopener">Заказать в этом стиле ↗</a><button class="like" id="char-like" data-like="mimi" aria-pressed="false" aria-label="В мудборд" style="position:static">{ICON_HEART}</button></div></div></div></dialog>'''
     (DIST / 'index.html').write_text(page(head, body, True, char_dialog), encoding='utf-8')
 
 # ---------- inner pages ----------
@@ -282,7 +282,7 @@ def order():
 <section class="section faq"><div><span class="kicker">04 · Вопросы</span><h2 style="font-size:clamp(36px,4.6vw,60px);margin-top:14px">Перед <em>заказом</em></h2></div><div class="faq-list">
 <details><summary>Можно начать без готового рисунка?</summary><p>Да. Подойдут примеры одежды, палитры и силуэта, описание характера и список деталей, которые должны быть у персонажа.</p></details>
 <details><summary>Можно купить готовую модель из коллекции?</summary><p>Коллекция показывает примеры в 3D. По конкретному персонажу напиши нам: уточним доступность модели, формат файла и условия использования.</p></details>
-<details><summary>Где посмотреть 3D-модели?</summary><p>В <a class="link" href="/#characters">коллекции NORMAS</a> можно повернуть персонажей, приблизить их и проверить доступную мимику. Ещё больше фильтров — в <a class="link" href="https://renigt.online/">каталоге Renigt</a>.</p></details></div></section>
+<details><summary>Где посмотреть 3D-модели?</summary><p>В <a class="link" href="/#characters">коллекции NORMAS</a> можно повернуть персонажей, приблизить их и проверить доступную мимику.</p></details></div></section>
 
 <div class="cta"><span class="kicker">Следующий шаг</span><h2 style="margin-top:18px">Расскажи о своём <em>персонаже</em></h2><p>Telegram — самый быстрый способ. Или собери бриф и пришли файлом.</p><div class="hero-actions"><a class="btn btn-lime" data-contact="telegram" href="{TG}">Написать в Telegram <span class="arr">↗</span></a><button class="btn btn-glass" data-brief>Составить бриф</button></div></div>
 </main>'''

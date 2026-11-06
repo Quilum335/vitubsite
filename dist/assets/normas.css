@@ -407,3 +407,6 @@ textarea{resize:vertical;min-height:96px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
 .hero-card[data-mood=neon] h1 em{background-image:linear-gradient(100deg,#FF3CAC,#B48CFF 50%,#00E5FF)}
 @media (max-width:640px){.hero-stage{min-height:720px}.hero-stage .alive{bottom:175px}}
+
+.foot-bottom{display:flex!important;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;margin-top:40px}
+.site-footer a.clone-btn{display:inline-flex;padding:0 16px;color:var(--ink)}
