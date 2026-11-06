@@ -137,7 +137,7 @@ if(pal){
     ['Сколько стоит 3D VTuber-модель','Журнал · бюджет','/journal/3d-vtuber-price/','₽'],
     ['2D или 3D VTuber','Журнал · формат','/journal/2d-or-3d/','◐'],
     ['Как подготовить референсы','Журнал · бриф','/journal/vtuber-brief/','✎'],
-    ['О моделях и технологии','Источники и лицензии','/credits/','i'],
+    ['О концептах и технологиях','Как оживают персонажи','/credits/','i'],
   ];
   const actions=[['Заказать модель','Telegram · '+(cfg.telegram||'').replace('https://t.me/','@'),cfg.telegram||'#','✦'],['Составить бриф','Опиши персонажа за 2 минуты','brief','✦'],['Написать в Telegram',(cfg.telegram||'').replace('https://t.me/','@'),cfg.telegram||'#','✈']];
   function render(){
